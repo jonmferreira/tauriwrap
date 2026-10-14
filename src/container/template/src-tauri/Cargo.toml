@@ -1,0 +1,29 @@
+[package]
+name = "tauriwrap-app"
+version = "0.1.0"
+description = "App desktop gerado pelo TauriWrap"
+authors = ["tauriwrap"]
+edition = "2021"
+
+# O sufixo `_lib` evita conflito entre o nome da lib e o do binário no Windows.
+# Ver https://github.com/rust-lang/cargo/issues/8519
+[lib]
+name = "tauriwrap_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Otimizações de tamanho — alinhadas ao propósito do TauriWrap (apps enxutos).
+# Ver https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

@@ -6,6 +6,8 @@ export interface WrapOptions {
   readonly name: string
   /** Diretório absoluto onde o artefato final é escrito. */
   readonly outDir: string
+  /** Se true, remove a imagem Docker do builder após o build (libera espaço). */
+  readonly clean: boolean
 }
 
 /** Resultado de um build concluído. */

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability base da janela principal — apenas o core (sem IPC extra).",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import type { WrapOptions } from './types'
 import { runDockerBuild } from './build'
 
-const USAGE = 'Uso: tauriwrap <url|dist/> --name <App> [--out <dir>]'
+const USAGE = 'Uso: tauriwrap <url|dist/> --name <App> [--out <dir>] [--clean]'
 
 /** Lê os argumentos do processo e os normaliza em WrapOptions. */
 export function parseCliOptions(argv: readonly string[]): WrapOptions {
@@ -13,6 +13,7 @@ export function parseCliOptions(argv: readonly string[]): WrapOptions {
     options: {
       name: { type: 'string', short: 'n' },
       out: { type: 'string', short: 'o', default: 'dist' },
+      clean: { type: 'boolean', default: false },
     },
   })
 
@@ -24,6 +25,7 @@ export function parseCliOptions(argv: readonly string[]): WrapOptions {
     source,
     name: values.name,
     outDir: resolve(process.cwd(), values.out ?? 'dist'),
+    clean: values.clean ?? false,
   }
 }
 

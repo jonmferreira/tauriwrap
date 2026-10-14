@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "tsx src/cli/index.ts",
     "build": "tsup",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
