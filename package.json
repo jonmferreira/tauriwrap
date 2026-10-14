@@ -19,7 +19,8 @@
     "dev": "tsx src/cli/index.ts",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+    "clean": "node scripts/clean.mjs",
+    "clean:deep": "node scripts/clean.mjs --deep"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

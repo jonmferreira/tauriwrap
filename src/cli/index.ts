@@ -1,9 +1,17 @@
 import { parseArgs } from 'node:util'
 import { resolve } from 'node:path'
-import type { WrapOptions } from './types'
+import type { WrapOptions, Platform } from './types'
 import { runDockerBuild } from './build'
 
-const USAGE = 'Uso: tauriwrap <url|dist/> --name <App> [--out <dir>] [--clean]'
+const USAGE =
+  'Uso: tauriwrap <url|dist/> --name <App> [--platform linux|windows] [--out <dir>] [--clean]'
+
+const PLATFORMS: readonly Platform[] = ['linux', 'windows']
+
+/** Plataforma-alvo padrão: a do host (Windows → windows; demais → linux). */
+function defaultPlatform(): Platform {
+  return process.platform === 'win32' ? 'windows' : 'linux'
+}
 
 /** Lê os argumentos do processo e os normaliza em WrapOptions. */
 export function parseCliOptions(argv: readonly string[]): WrapOptions {
@@ -13,6 +21,7 @@ export function parseCliOptions(argv: readonly string[]): WrapOptions {
     options: {
       name: { type: 'string', short: 'n' },
       out: { type: 'string', short: 'o', default: 'dist' },
+      platform: { type: 'string', short: 'p' },
       clean: { type: 'boolean', default: false },
     },
   })
@@ -21,11 +30,19 @@ export function parseCliOptions(argv: readonly string[]): WrapOptions {
   if (!source) throw new Error(`Fonte (URL ou pasta) obrigatória.\n${USAGE}`)
   if (!values.name) throw new Error(`--name obrigatório.\n${USAGE}`)
 
+  const platform = (values.platform ?? defaultPlatform()) as Platform
+  if (!PLATFORMS.includes(platform)) {
+    throw new Error(
+      `--platform inválido: "${values.platform}". Use: ${PLATFORMS.join(' | ')}.\n${USAGE}`,
+    )
+  }
+
   return {
     source,
     name: values.name,
     outDir: resolve(process.cwd(), values.out ?? 'dist'),
     clean: values.clean ?? false,
+    platform,
   }
 }
 

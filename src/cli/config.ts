@@ -18,6 +18,9 @@ function toIdentifierSlug(name: string): string {
  * Ref: https://v2.tauri.app/reference/config/
  */
 export function buildTauriConfig(options: WrapOptions): TauriConfig {
+  // Bundle target por plataforma: NSIS (-setup.exe) no Windows, .deb no Linux.
+  const targets = options.platform === 'windows' ? ['nsis'] : ['deb']
+
   return {
     productName: options.name,
     version: '0.1.0',
@@ -38,7 +41,7 @@ export function buildTauriConfig(options: WrapOptions): TauriConfig {
     },
     bundle: {
       active: true,
-      targets: ['deb'],
+      targets,
       icon: [
         'icons/32x32.png',
         'icons/128x128.png',

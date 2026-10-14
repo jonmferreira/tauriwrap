@@ -3,10 +3,16 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve, join } from 'node:path'
 import { existsSync } from 'node:fs'
 import { mkdir, readdir } from 'node:fs/promises'
-import type { WrapOptions, BuildResult } from './types'
+import type { WrapOptions, BuildResult, Platform } from './types'
 import { buildTauriConfig } from './config'
 
 const BUILDER_IMAGE = 'tauriwrap-builder:local'
+
+/** Extensão do artefato final por plataforma-alvo. */
+const ARTIFACT_SUFFIX: Record<Platform, string> = {
+  linux: '.deb',
+  windows: '.exe',
+}
 
 /**
  * Localiza `src/container` subindo a partir do módulo atual. Resolve os dois
@@ -62,8 +68,8 @@ async function removeBuilderImage(): Promise<void> {
  *
  * Contrato com o container (`src/container/build.sh`):
  * - recebe a config Tauri serializada na env `TAURIWRAP_CONFIG`
- *   (com `build.frontendDist` = URL remota);
- * - escreve o `.deb` no volume montado em `/out`.
+ *   (com `build.frontendDist` = URL remota) e a plataforma em `TAURIWRAP_TARGET`;
+ * - escreve o artefato (`.deb` ou `-setup.exe`) no volume montado em `/out`.
  *
  * O container roda com `--rm`, então seu filesystem temporário é descartado a
  * cada build. Com `--clean`, também remove a imagem do builder ao final.
@@ -77,14 +83,16 @@ export async function runDockerBuild(options: WrapOptions): Promise<BuildResult>
   await run('docker', [
     'run', '--rm',
     '-e', `TAURIWRAP_CONFIG=${JSON.stringify(config)}`,
+    '-e', `TAURIWRAP_TARGET=${options.platform}`,
     '-v', `${options.outDir}:/out`,
     BUILDER_IMAGE,
   ])
 
-  const deb = (await readdir(options.outDir)).find((f) => f.endsWith('.deb'))
-  if (!deb) throw new Error('Build terminou sem gerar um .deb em outDir.')
+  const suffix = ARTIFACT_SUFFIX[options.platform]
+  const artifact = (await readdir(options.outDir)).find((f) => f.endsWith(suffix))
+  if (!artifact) throw new Error(`Build terminou sem gerar um ${suffix} em outDir.`)
 
   if (options.clean) await removeBuilderImage()
 
-  return { artifactPath: join(options.outDir, deb) }
+  return { artifactPath: join(options.outDir, artifact) }
 }
