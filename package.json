@@ -1,0 +1,29 @@
+{
+  "name": "tauriwrap",
+  "version": "0.0.1",
+  "description": "CLI MIT que transforma qualquer URL ou webapp em app desktop nativo via Tauri, sem instalar Rust.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "tauriwrap": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "src/container",
+    "src/schema"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "tsx src/cli/index.ts",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.6.0"
+  }
+}
