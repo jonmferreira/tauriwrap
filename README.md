@@ -21,7 +21,7 @@ No MIT-licensed alternative with the same ergonomics exists.
 
 ```bash
 npx tauriwrap https://myapp.com --name MyApp
-# → MyApp.exe / MyApp.dmg / MyApp.deb
+# → MyApp.exe / MyApp.dmg / MyApp.deb (macOS planned)
 ```
 
 No Rust installation required. No Tauri setup. One command.
@@ -33,10 +33,10 @@ No Rust installation required. No Tauri setup. One command.
 | Feature | Status |
 |---|---|
 | MIT license | ✅ |
-|  No Rust required (hermetic Docker build) | ✅ provado |
-| Native WebView (poucos MB vs ~150MB Electron) | ✅ |
-| Linux `.deb` | ✅ provado (v0.1.0) |
-| Windows `.exe` (NSIS) | ✅ provado (v0.2.0) |
+|  No Rust required (hermetic Docker build) | ✅ proven |
+| Native WebView (a few MB vs ~150MB Electron) | ✅ |
+| Linux `.deb` | ✅ proven (v0.1.0) |
+| Windows `.exe` (NSIS) | ✅ proven (v0.2.0) |
 | Linux AppImage | 🚧 planned (M2) |
 | macOS `.dmg` via CI runner | 🚧 planned (M3) |
 | `wrap.config.json` declarative | 🚧 planned (M1) |
@@ -46,9 +46,7 @@ No Rust installation required. No Tauri setup. One command.
 
 ## AI disclosure
 
-This project code was implemented with substancial help from a coding assistant :
-- Claude Sonnet 4.6 
-- Claude Opus 4.8
+The current proof  of concept, functional on both Linux (Debian) and Windows, was implemented with the assistance of an AI Coding assistant: Claude Code (Sonnet 4.6 initially, and Opus 4.8 for the more complex build-related tasks, including screenshot capture and interactive screenshot analysis until funcitionality was confirmed). The work funded by Restack will strictly adhere to the read-only policy, never using AI to generate codes or artifacts.
 
 ## Status
 
